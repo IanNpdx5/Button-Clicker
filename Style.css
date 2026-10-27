@@ -10,6 +10,10 @@ body {
     margin: 0;
 }
 
+button {
+    font-family: "Orbitron", Arial, sans-serif;
+}
+
 #page {
     min-height: 100vh;
     display: grid;
