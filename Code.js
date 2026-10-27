@@ -70,15 +70,6 @@ $(function () {
 
   document.getElementById("softReset").addEventListener("click", softReset);
 
-  function statReset() {
-    state.totalClicks = 0;
-    state.totalPresses = 0;
-    saveGame();
-    location.reload();
-  }
-
-  document.getElementById("statReset").addEventListener("click", statReset);
-
   function hardReset() {
     state.count = 0;
     state.perClick = 0;
@@ -89,7 +80,7 @@ $(function () {
     location.reload();
   }
 
-  //document.getElementById("hardReset").addEventListener("click", hardReset);
+  document.getElementById("hardReset").addEventListener("click", hardReset);
 
   function render() {
     $("#count").text("Clicks: " + state.count);
