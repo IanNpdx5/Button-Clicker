@@ -39,7 +39,7 @@ $(function () {
       var saved = JSON.parse(localStorage.getItem(SAVE_KEY));
       if (!saved || saved.version !== 1 || !saved.state) return;
 
-      ["count", "totalClicks", "presses", "perClick", "perSecond"].forEach(function (key) {
+      ["count", "totalClicks", "totalPresses", "perClick", "perSecond"].forEach(function (key) {
         var value = saved.state[key];
         if (typeof value === "number" && Number.isFinite(value) && value >= 0) {
           state[key] = key === "perClick" ? Math.max(1, value) : value;
