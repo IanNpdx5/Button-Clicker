@@ -27,7 +27,7 @@ $(function () {
   var $clicks = $("#clicks");
   var $presses = $("#presses");
 
-    upgrades.forEach(function (u) {
+  upgrades.forEach(function (u) {
     u.$el = $(u.id);
     u.$textSpan = u.$el.find(".button-text"); // Caches the full text target span
   });
@@ -57,22 +57,22 @@ $(function () {
       });
 
       if (Array.isArray(saved.prices)) {
-            upgrades.forEach(function (u) {
-      var affordable = state.count >= u.price;
-      
-      // Concat the updated price together with ' Clicks' text smoothly
-      u.$textSpan.text(u.price.toLocaleString() + " Clicks");
-      
-      u.$el.prop("disabled", !affordable)
-           .toggleClass("affordable", affordable);
-    });
+        upgrades.forEach(function (u) {
+          var affordable = state.count >= u.price;
+
+          // Concat the updated price together with ' Clicks' text smoothly
+          u.$textSpan.text(u.price.toLocaleString() + " Clicks");
+
+          u.$el.prop("disabled", !affordable)
+            .toggleClass("affordable", affordable);
+        });
       }
     } catch (error) {
       console.error(error);
     }
   }
 
-    function softReset() {
+  function softReset() {
     // 1. Clear out storage completely so it loads clean
     try {
       localStorage.removeItem(SAVE_KEY);
@@ -173,7 +173,7 @@ $(function () {
       var affordable = state.count >= u.price;
       u.$costSpan.text(u.price.toLocaleString());
       u.$el.prop("disabled", !affordable)
-           .toggleClass("affordable", affordable);
+        .toggleClass("affordable", affordable);
     });
 
     // Schedule next frame rendering pass
@@ -182,7 +182,7 @@ $(function () {
 
   loadGame();
   window.addEventListener("pagehide", saveGame);
-  
+
   // Kick off the loop
   requestAnimationFrame(gameLoop);
 });
