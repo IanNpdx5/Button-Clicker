@@ -2,7 +2,6 @@ $(function () {
   var state = { count: 0, totalClicks: 0, totalPresses: 0, perClick: 1, perSecond: 0 };
   var SAVE_KEY = "buttonClickerSave";
 
-  // type: "pc" = per click, "ps" = per second
   var upgrades = [
     { id: "#up1", price: 15, amount: 1, type: "pc" },
     { id: "#up2", price: 100, amount: 5, type: "pc" },
@@ -19,7 +18,19 @@ $(function () {
     { id: "#up13", price: 250000, amount: 5, type: "pcMultiplier", effect: "5× Click power" },
     { id: "#up14", price: 250000, amount: 5, type: "psMultiplier", effect: "5× CPS" }
   ];
-  var PRICE_GROWTH = 1.15; // set to 1 to keep your original fixed prices
+  var PRICE_GROWTH = 1.15;
+
+  // Cache DOM selectors to eliminate repetitive layout lookups
+  var $count = $("#count");
+  var $amountPC = $("#amountPC");
+  var $amountPS = $("#amountPS");
+  var $clicks = $("#clicks");
+  var $presses = $("#presses");
+
+  upgrades.forEach(function (u) {
+    u.$el = $(u.id);
+    u.$costSpan = u.$el.find(".cost"); // Targets the specific inner price container
+  });
 
   function saveGame() {
     try {
@@ -29,8 +40,7 @@ $(function () {
         prices: upgrades.map(function (u) { return u.price; })
       }));
     } catch (error) {
-      console.error(error)
-      // The game remains playable if browser storage is unavailable.
+      console.error(error);
     }
   }
 
@@ -55,60 +65,45 @@ $(function () {
         });
       }
     } catch (error) {
-      console.error(error)
-      // Ignore invalid or unavailable saves and start a fresh game.
+      console.error(error);
     }
   }
 
   function softReset() {
     state.count = 0;
     state.perSecond = 0;
-    state.perClick = 0;
+    state.perClick = 1;
     saveGame();
     location.reload();
   }
-
   document.getElementById("softReset").addEventListener("click", softReset);
 
   function hardReset() {
     state.count = 0;
-    state.perClick = 0;
+    state.perClick = 1;
     state.perSecond = 0;
     state.totalClicks = 0;
     state.totalPresses = 0;
     saveGame();
     location.reload();
   }
-
   document.getElementById("hardReset").addEventListener("click", hardReset);
 
-  function render() {
-    $("#count").text("Clicks: " + state.count);
-    $("#amountPC").text("Amount per click: " + state.perClick);
-    $("#amountPS").text("Click(s) per second (CPS): " + state.perSecond);
-    $("#clicks").text("Total clicks: " + state.totalClicks);
-    $("#presses").text("Total presses: " + state.totalPresses);
-
-    upgrades.forEach(function (u) {
-      var affordable = state.count >= u.price;
-      var effect = u.effect || ("+" + u.amount + (u.type === "pc" ? " click" : " CPS"));
-      $(u.id)
-        .html('<span class="cost">' + u.price.toLocaleString() + '</span> Clicks (' + effect + ')')
-        .prop("disabled", !affordable)
-        .toggleClass("affordable", affordable);
-    });
+  var savePending = false;
+  function queueSave() {
+    savePending = true;
   }
 
+  // User input modifications modify the state array, leaving rendering tasks to requestAnimationFrame
   $("#clickerButton").on("click", function () {
     state.count += state.perClick;
     state.totalClicks += state.perClick;
     state.totalPresses++;
-    render();
-    saveGame();
+    queueSave();
   });
 
   upgrades.forEach(function (u) {
-    $(u.id).on("click", function () {
+    u.$el.on("click", function () {
       if (state.count < u.price) return;
       state.count -= u.price;
       if (u.type === "pc") state.perClick += u.amount;
@@ -116,20 +111,55 @@ $(function () {
       else if (u.type === "pcMultiplier") state.perClick *= u.amount;
       else if (u.type === "psMultiplier") state.perSecond = Math.max(1, state.perSecond) * u.amount;
       u.price = Math.ceil(u.price * PRICE_GROWTH);
-      render();
-      saveGame();
+      queueSave();
     });
   });
 
+  // Background 1-second loop handles throttled operations like saving data to disk
   setInterval(function () {
-    if (state.perSecond === 0) return;
-    state.count += state.perSecond;
-    state.totalClicks += state.perSecond;
-    render();
-    saveGame();
+    if (savePending) {
+      saveGame();
+      savePending = false;
+    }
   }, 1000);
+
+  // --- 60FPS HIGH-FRAMERATE TICK LOOP ENGINE ---
+  var lastTick = performance.now();
+
+  function gameLoop(timestamp) {
+    // Calculate fractional time difference between monitor frames (delta time)
+    var delta = (timestamp - lastTick) / 1000;
+    lastTick = timestamp;
+
+    // Smooth point accumulation over fractional time differences
+    if (state.perSecond > 0 && delta > 0) {
+      var pointsToAdd = state.perSecond * delta;
+      state.count += pointsToAdd;
+      state.totalClicks += pointsToAdd;
+    }
+
+    // High performance UI rendering
+    // Math.floor displays stable integer counts, masking hidden float decimals
+    $count.text("Clicks: " + Math.floor(state.count).toLocaleString());
+    $amountPC.text("Amount per click: " + state.perClick.toLocaleString());
+    $amountPS.text("Click(s) per second (CPS): " + state.perSecond.toLocaleString());
+    $clicks.text("Total clicks: " + Math.floor(state.totalClicks).toLocaleString());
+    $presses.text("Total presses: " + state.totalPresses.toLocaleString());
+
+    upgrades.forEach(function (u) {
+      var affordable = state.count >= u.price;
+      u.$costSpan.text(u.price.toLocaleString());
+      u.$el.prop("disabled", !affordable)
+           .toggleClass("affordable", affordable);
+    });
+
+    // Schedule next frame rendering pass
+    requestAnimationFrame(gameLoop);
+  }
 
   loadGame();
   window.addEventListener("pagehide", saveGame);
-  render();
+  
+  // Kick off the loop
+  requestAnimationFrame(gameLoop);
 });
