@@ -1,21 +1,22 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KNQ53RTX');</script>
-<!-- End Google Tag Manager -->
-     <!-- Define the listener BEFORE GTM fires the template -->
-  <script>
-    var consentCallbacks = [];
-    window.addConsentListenerExample = function (cb) {
-      consentCallbacks.push(cb);
-    };
-  </script>
-</script>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KNQ53RTX');</script>
+        <!-- End Google Tag Manager -->
+
+        <!-- Define the listener BEFORE GTM fires the template -->
+        <script>
+          var consentCallbacks = [];
+          window.addConsentListenerExample = function (cb) {
+            consentCallbacks.push(cb);
+          };
+        </script>
+        
         <meta charset="utf-8">
         <meta name="google-site-verification" content="ouCouGqVLxuDeXoQCqp5EmB-gzAAtTMjPl36F5xg9vQ" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,100 +29,105 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <link href="Style.css" rel="stylesheet">
     </head>
     <body>
-     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KNQ53RTX"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-        <div id = "page">
-        <div id = "buttondiv">
-            <button id = "clickerButton">Click Me!</button>
-            <h3 id="count">Clicks: ???</h3>
-        </div>
-        <div id = "shop">
-            <div id = "clickShop">
-            <h3>Click SHOP</h3>
-            <button id = "up1">15 Clicks</button><br>
-            <p>+1 Click</p>
-            <button id = "up2">100 Clicks</button><br>
-            <p>+5 Clicks</p>
-            <button id = "up3">500 Clicks</button><br>
-            <p>+10 Clicks</p>
-            <button id = "up4">1000 Clicks</button><br>
-            <p>+100 Clicks</p>
-            <button id = "up5">5000 Clicks</button><br>
-            <p>+500 Clicks</p>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KNQ53RTX"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        
+        <div id="page">
+            <div id="buttondiv">
+                <button id="clickerButton">Click Me!</button>
+                <h3 id="count">Clicks: ???</h3>
             </div>
-            <div id = "CPSShop">
-            <h3>CPS SHOP</h3>
-            <button id = "up6">100 Clicks</button><br>
-            <p>+1 CPS</p>
-            <button id = "up7">500 Clicks</button><br>
-            <p>+5 CPS</p>
-            <button id = "up8">1000 Clicks</button><br>
-            <p>+10 CPS</p>
-            <button id = "up9">5000 Clicks</button><br>
-            <p>+50 CPS</p>
-            <button id = "up10">10000 Clicks</button><br>
-            <p>+100 CPS</p>
+            
+            <div id="shop">
+                <div id="clickShop">
+                    <h3>Click SHOP</h3>
+                    <button id="up1"><span class="cost">15</span> Clicks</button><br>
+                    <p>+1 Click</p>
+                    <button id="up2"><span class="cost">100</span> Clicks</button><br>
+                    <p>+5 Clicks</p>
+                    <button id="up3"><span class="cost">500</span> Clicks</button><br>
+                    <p>+10 Clicks</p>
+                    <button id="up4"><span class="cost">1000</span> Clicks</button><br>
+                    <p>+100 Clicks</p>
+                    <button id="up5"><span class="cost">5000</span> Clicks</button><br>
+                    <p>+500 Clicks</p>
+                </div>
+                
+                <div id="CPSShop">
+                    <h3>CPS SHOP</h3>
+                    <button id="up6"><span class="cost">100</span> Clicks</button><br>
+                    <p>+1 CPS</p>
+                    <button id="up7"><span class="cost">500</span> Clicks</button><br>
+                    <p>+5 CPS</p>
+                    <button id="up8"><span class="cost">1000</span> Clicks</button><br>
+                    <p>+10 CPS</p>
+                    <button id="up9"><span class="cost">5000</span> Clicks</button><br>
+                    <p>+50 CPS</p>
+                    <button id="up10"><span class="cost">10000</span> Clicks</button><br>
+                    <p>+100 CPS</p>
+                </div>
+                
+                <div id="multiplierShop">
+                    <h3>Multiplier SHOP</h3>
+                    <button id="up11"><span class="cost">25000</span> Clicks</button><br>
+                    <p>2× click power</p>
+                    <button id="up12"><span class="cost">25000</span> Clicks</button><br>
+                    <p>2× CPS</p>
+                    <button id="up13"><span class="cost">250000</span> Clicks</button><br>
+                    <p>5× click power</p>
+                    <button id="up14"><span class="cost">250000</span> Clicks</button><br>
+                    <p>5× CPS</p>
+                </div>
             </div>
-            <div id = "multiplierShop">
-            <h3>Multiplier SHOP</h3>
-            <button id = "up11">25000 Clicks</button><br>
-            <p>2× click power</p>
-            <button id = "up12">25000 Clicks</button><br>
-            <p>2× CPS</p>
-            <button id = "up13">250000 Clicks</button><br>
-            <p>5× click power</p>
-            <button id = "up14">250000 Clicks</button><br>
-            <p>5× CPS</p>
+            
+            <div id="info">
+                <section id="productionInfo">
+                    <h2>Production</h2>
+                    <p id="amountPC">Amount per click: ???</p>
+                    <p id="amountPS">Click(s) per second (CPS): ???</p>
+                    <button id="softReset">Reset Current Game</button>
+                    <button id="hardReset">WIPE SAVE</button>
+                </section>
+                <section id="lifetimeInfo">
+                    <h2>Lifetime Stats</h2>
+                    <p id="clicks">Total clicks: ???</p>
+                    <p id="presses">Total presses: ???</p>
+                </section>
             </div>
         </div>
-        <div id = "info">
-            <section id = "productionInfo">
-                <h2>Production</h2>
-                <p id = "amountPC">Amount per click: ???</p>
-                <p id = "amountPS">Click(s) per second (CPS): ???</p>
-                <button id="softReset">Reset Current Game</button>
-                <button id="hardReset">WIPE SAVE</button>
-            </section>
-            <section id = "lifetimeInfo">
-                <h2>Lifetime Stats</h2>
-                <p id = "clicks">Total clicks: ???</p>
-                <p id = "presses">Total presses: ???</p>
-            </section>
-        </div>
-        </div>
-     <div id="consent-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;padding:1rem;background:#222;color:#fff;">
-    We use cookies for analytics and ads.
-    <button id="accept-all">Accept all</button>
-    <button id="reject-all">Reject all</button>
-  </div>
 
-  <script>
-    function saveConsent(granted) {
-      var consent = {
-        adConsentGranted: granted,
-        adUserDataConsentGranted: granted,
-        adPersonalizationConsentGranted: granted,
-        analyticsConsentGranted: granted,
-        functionalityConsentGranted: granted,
-        personalizationConsentGranted: granted,
-        securityConsentGranted: true
-      };
-      // Cookie name must match COOKIE_NAME ('cookies') in the template
-      document.cookie = 'cookies=' + encodeURIComponent(JSON.stringify(consent)) +
-        ';max-age=31536000;path=/;SameSite=Lax';
-      consentCallbacks.forEach(function (cb) { cb(consent); });
-      document.getElementById('consent-banner').style.display = 'none';
-    }
+        <div id="consent-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;padding:1rem;background:#222;color:#fff;">
+            We use cookies for analytics and ads.
+            <button id="accept-all">Accept all</button>
+            <button id="reject-all">Reject all</button>
+        </div>
 
-    if (document.cookie.indexOf('cookies=') === -1) {
-      document.getElementById('consent-banner').style.display = 'block';
-    }
-    document.getElementById('accept-all').onclick = function () { saveConsent(true); };
-    document.getElementById('reject-all').onclick = function () { saveConsent(false); };
-  </script>
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script>
+            function saveConsent(granted) {
+              var consent = {
+                adConsentGranted: granted,
+                adUserDataConsentGranted: granted,
+                adPersonalizationConsentGranted: granted,
+                analyticsConsentGranted: granted,
+                functionalityConsentGranted: granted,
+                personalizationConsentGranted: granted,
+                securityConsentGranted: true
+              };
+              document.cookie = 'cookies=' + encodeURIComponent(JSON.stringify(consent)) +
+                ';max-age=31536000;path=/;SameSite=Lax';
+              consentCallbacks.forEach(function (cb) { cb(consent); });
+              document.getElementById('consent-banner').style.display = 'none';
+            }
+
+            if (document.cookie.indexOf('cookies=') === -1) {
+              document.getElementById('consent-banner').style.display = 'block';
+            }
+            document.getElementById('accept-all').onclick = function () { saveConsent(true); };
+            document.getElementById('reject-all').onclick = function () { saveConsent(false); };
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="./Code.js"></script>
     </body>
 </html>
