@@ -69,22 +69,42 @@ $(function () {
     }
   }
 
-  function softReset() {
+    function softReset() {
+    // 1. Clear out storage completely so it loads clean
+    try {
+      localStorage.removeItem(SAVE_KEY);
+    } catch (e) {
+      console.error(e);
+    }
+
+    // 2. Set state back to fresh starting parameters
     state.count = 0;
     state.perSecond = 0;
     state.perClick = 1;
-    saveGame();
+    state.totalClicks = 0;
+    state.totalPresses = 0;
+
+    // 3. Force page reload to clear out modified prices currently in memory
     location.reload();
   }
   document.getElementById("softReset").addEventListener("click", softReset);
 
   function hardReset() {
+    // 1. Clear out storage completely
+    try {
+      localStorage.removeItem(SAVE_KEY);
+    } catch (e) {
+      console.error(e);
+    }
+
+    // 2. Wipe state variables completely
     state.count = 0;
     state.perClick = 1;
     state.perSecond = 0;
     state.totalClicks = 0;
     state.totalPresses = 0;
-    saveGame();
+
+    // 3. Reload to reset the active prices array to baseline defaults
     location.reload();
   }
   document.getElementById("hardReset").addEventListener("click", hardReset);
