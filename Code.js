@@ -56,17 +56,14 @@ $(function () {
         }
       });
 
+      // FIXED: Restored correct save loading loop to populate values cleanly
       if (Array.isArray(saved.prices)) {
-            upgrades.forEach(function (u) {
-      var affordable = state.count >= u.price;
-      
-      // FIXED: Changed u.$costSpan to u.$textSpan
-      u.$textSpan.text(u.price.toLocaleString() + " Clicks");
-      
-      u.$el.prop("disabled", !affordable)
-           .toggleClass("affordable", affordable);
-    });
-
+        upgrades.forEach(function (u, index) {
+          var price = saved.prices[index];
+          if (typeof price === "number" && Number.isFinite(price) && price >= 1) {
+            u.price = price;
+          }
+        });
       }
     } catch (error) {
       console.error(error);
@@ -74,41 +71,31 @@ $(function () {
   }
 
   function softReset() {
-    // 1. Clear out storage completely so it loads clean
     try {
       localStorage.removeItem(SAVE_KEY);
     } catch (e) {
       console.error(e);
     }
-
-    // 2. Set state back to fresh starting parameters
     state.count = 0;
     state.perSecond = 0;
     state.perClick = 1;
     state.totalClicks = 0;
     state.totalPresses = 0;
-
-    // 3. Force page reload to clear out modified prices currently in memory
     location.reload();
   }
   document.getElementById("softReset").addEventListener("click", softReset);
 
   function hardReset() {
-    // 1. Clear out storage completely
     try {
       localStorage.removeItem(SAVE_KEY);
     } catch (e) {
       console.error(e);
     }
-
-    // 2. Wipe state variables completely
     state.count = 0;
     state.perClick = 1;
     state.perSecond = 0;
     state.totalClicks = 0;
     state.totalPresses = 0;
-
-    // 3. Reload to reset the active prices array to baseline defaults
     location.reload();
   }
   document.getElementById("hardReset").addEventListener("click", hardReset);
@@ -118,7 +105,6 @@ $(function () {
     savePending = true;
   }
 
-  // User input modifications modify the state array, leaving rendering tasks to requestAnimationFrame
   $("#clickerButton").on("click", function () {
     state.count += state.perClick;
     state.totalClicks += state.perClick;
@@ -139,7 +125,6 @@ $(function () {
     });
   });
 
-  // Background 1-second loop handles throttled operations like saving data to disk
   setInterval(function () {
     if (savePending) {
       saveGame();
@@ -151,19 +136,15 @@ $(function () {
   var lastTick = performance.now();
 
   function gameLoop(timestamp) {
-    // Calculate fractional time difference between monitor frames (delta time)
     var delta = (timestamp - lastTick) / 1000;
     lastTick = timestamp;
 
-    // Smooth point accumulation over fractional time differences
     if (state.perSecond > 0 && delta > 0) {
       var pointsToAdd = state.perSecond * delta;
       state.count += pointsToAdd;
       state.totalClicks += pointsToAdd;
     }
 
-    // High performance UI rendering
-    // Math.floor displays stable integer counts, masking hidden float decimals
     $count.text("Clicks: " + Math.floor(state.count).toLocaleString());
     $amountPC.text("Amount per click: " + state.perClick.toLocaleString());
     $amountPS.text("Click(s) per second (CPS): " + state.perSecond.toLocaleString());
@@ -172,18 +153,17 @@ $(function () {
 
     upgrades.forEach(function (u) {
       var affordable = state.count >= u.price;
-      u.$costSpan.text(u.price.toLocaleString());
+      // FIXED: Swapped out legacy $costSpan to use the global frame $textSpan
+      u.$textSpan.text(u.price.toLocaleString() + " Clicks");
       u.$el.prop("disabled", !affordable)
         .toggleClass("affordable", affordable);
     });
 
-    // Schedule next frame rendering pass
     requestAnimationFrame(gameLoop);
   }
 
   loadGame();
   window.addEventListener("pagehide", saveGame);
 
-  // Kick off the loop
   requestAnimationFrame(gameLoop);
 });
