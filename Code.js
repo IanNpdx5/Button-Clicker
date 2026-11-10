@@ -57,15 +57,16 @@ $(function () {
       });
 
       if (Array.isArray(saved.prices)) {
-        upgrades.forEach(function (u) {
-          var affordable = state.count >= u.price;
+            upgrades.forEach(function (u) {
+      var affordable = state.count >= u.price;
+      
+      // FIXED: Changed u.$costSpan to u.$textSpan
+      u.$textSpan.text(u.price.toLocaleString() + " Clicks");
+      
+      u.$el.prop("disabled", !affordable)
+           .toggleClass("affordable", affordable);
+    });
 
-          // Concat the updated price together with ' Clicks' text smoothly
-          u.$textSpan.text(u.price.toLocaleString() + " Clicks");
-
-          u.$el.prop("disabled", !affordable)
-            .toggleClass("affordable", affordable);
-        });
       }
     } catch (error) {
       console.error(error);
