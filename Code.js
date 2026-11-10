@@ -20,7 +20,9 @@ $(function () {
   ];
   var PRICE_GROWTH = 1.15;
 
-  // Cache DOM selectors to eliminate repetitive layout lookups
+  // Track if a reset is actively in progress to prevent rogue auto-saves
+  var isResetting = false;
+
   var $count = $("#count");
   var $amountPC = $("#amountPC");
   var $amountPS = $("#amountPS");
@@ -29,10 +31,12 @@ $(function () {
 
   upgrades.forEach(function (u) {
     u.$el = $(u.id);
-    u.$textSpan = u.$el.find(".button-text"); // Caches the full text target span
+    u.$textSpan = u.$el.find(".button-text");
   });
 
   function saveGame() {
+    // If the game is resetting, block ALL saves immediately
+    if (isResetting) return;
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         version: 1,
@@ -56,7 +60,6 @@ $(function () {
         }
       });
 
-      // FIXED: Restored correct save loading loop to populate values cleanly
       if (Array.isArray(saved.prices)) {
         upgrades.forEach(function (u, index) {
           var price = saved.prices[index];
@@ -70,35 +73,28 @@ $(function () {
     }
   }
 
+  // --- COMPREHENSIVE FIX: Reset handlers block autosaves before clearing ---
   function softReset() {
+    isResetting = true; // Block save actions immediately
     try {
       localStorage.removeItem(SAVE_KEY);
     } catch (e) {
       console.error(e);
     }
-    state.count = 0;
-    state.perSecond = 0;
-    state.perClick = 1;
-    state.totalClicks = 0;
-    state.totalPresses = 0;
     location.reload();
   }
-  document.getElementById("softReset").addEventListener("click", softReset);
+  $("#softReset").on("click", softReset);
 
   function hardReset() {
+    isResetting = true; // Block save actions immediately
     try {
       localStorage.removeItem(SAVE_KEY);
     } catch (e) {
       console.error(e);
     }
-    state.count = 0;
-    state.perClick = 1;
-    state.perSecond = 0;
-    state.totalClicks = 0;
-    state.totalPresses = 0;
     location.reload();
   }
-  document.getElementById("hardReset").addEventListener("click", hardReset);
+  $("#hardReset").on("click", hardReset);
 
   var savePending = false;
   function queueSave() {
@@ -126,13 +122,12 @@ $(function () {
   });
 
   setInterval(function () {
-    if (savePending) {
+    if (savePending && !isResetting) {
       saveGame();
       savePending = false;
     }
   }, 1000);
 
-  // --- 60FPS HIGH-FRAMERATE TICK LOOP ENGINE ---
   var lastTick = performance.now();
 
   function gameLoop(timestamp) {
@@ -153,8 +148,9 @@ $(function () {
 
     upgrades.forEach(function (u) {
       var affordable = state.count >= u.price;
-      // FIXED: Swapped out legacy $costSpan to use the global frame $textSpan
-      u.$textSpan.text(u.price.toLocaleString() + " Clicks");
+      if (u.$textSpan.length) {
+        u.$textSpan.text(u.price.toLocaleString() + " Clicks");
+      }
       u.$el.prop("disabled", !affordable)
         .toggleClass("affordable", affordable);
     });
@@ -163,7 +159,9 @@ $(function () {
   }
 
   loadGame();
-  window.addEventListener("pagehide", saveGame);
+  window.addEventListener("pagehide", function() {
+    if (!isResetting) saveGame();
+  });
 
   requestAnimationFrame(gameLoop);
 });
