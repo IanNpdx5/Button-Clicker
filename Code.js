@@ -27,9 +27,9 @@ $(function () {
   var $clicks = $("#clicks");
   var $presses = $("#presses");
 
-  upgrades.forEach(function (u) {
+    upgrades.forEach(function (u) {
     u.$el = $(u.id);
-    u.$costSpan = u.$el.find(".cost"); // Targets the specific inner price container
+    u.$textSpan = u.$el.find(".button-text"); // Caches the full text target span
   });
 
   function saveGame() {
@@ -57,12 +57,15 @@ $(function () {
       });
 
       if (Array.isArray(saved.prices)) {
-        upgrades.forEach(function (u, index) {
-          var price = saved.prices[index];
-          if (typeof price === "number" && Number.isFinite(price) && price >= 1) {
-            u.price = price;
-          }
-        });
+            upgrades.forEach(function (u) {
+      var affordable = state.count >= u.price;
+      
+      // Concat the updated price together with ' Clicks' text smoothly
+      u.$textSpan.text(u.price.toLocaleString() + " Clicks");
+      
+      u.$el.prop("disabled", !affordable)
+           .toggleClass("affordable", affordable);
+    });
       }
     } catch (error) {
       console.error(error);
