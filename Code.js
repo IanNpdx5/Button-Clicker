@@ -159,7 +159,7 @@ $(function () {
   }
 
   loadGame();
-  window.addEventListener("pagehide", function() {
+  window.addEventListener("pagehide", function () {
     if (!isResetting) saveGame();
   });
 
