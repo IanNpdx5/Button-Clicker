@@ -57,7 +57,9 @@ button {
     margin: 0.25rem 0 0.5rem;
     background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .game-intro {
