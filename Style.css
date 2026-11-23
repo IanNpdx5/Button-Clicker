@@ -95,7 +95,7 @@ button {
 }
 
 #buttondiv button {
-    font-family: "Orbitron", Arial, sans-serif;
+    font-family: "Orbitron", 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-weight: 800;
     width: clamp(140px, 28vw, 320px);
     height: clamp(140px, 28vw, 320px);
@@ -173,7 +173,7 @@ button {
 
 /* ---- Shop Buttons ---- */
 #shop button {
-    font-family: "Orbitron", Arial, sans-serif;
+    font-family: "Orbitron", 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 0.9rem;
     width: 100%;
     padding: 9px 12px;
@@ -230,7 +230,7 @@ button {
 
 #productionInfo button,
 #lifetimeInfo button {
-    font-family: "Orbitron", Arial, sans-serif;
+    font-family: "Orbitron", 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 8px 14px;
